@@ -2,13 +2,26 @@ server:
   port: 9000
 spring:
   kafka:
+    bootstrap-servers: localhost:9092
     consumer:
-      bootstrap-servers: localhost:9092
       group-id: group-id
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
-      bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+# SERVICE CHECKER CONFIGURATION (Camunda)
+servicechecker:
+  camunda:
+    url: http://localhost:8080/engine-rest
