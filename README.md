@@ -1,11 +1,9 @@
 # SpringBootKafkaApp
 SpringBootKafkaAppApplication
 
-C:\kafka\kafka_2.12-0.10.2.1\bin\windows\>
+Steps: 
+Cd kafka\kafka_2.12-2.8.1\bin\windows
 
-C:\kafka\kafka_2.12-2.1.1\bin\windows
-
-C:\kafka\bin\windows\>
 Zookeeper:
 
 zookeeper-server-start.bat ..\..\config\zookeeper.properties
@@ -42,3 +40,5 @@ cd kafka_2.12-2.5.1/
 $ bin/kafka-topics.sh --list --zookeeper localhost:2181
 ![image](https://github.com/shivanarayana/SpringBootKafkaApp/assets/10083536/8e698671-6d30-4d47-a036-242306370cb0)
 
+# Create a Kafka topic for data migration
+bin/kafka-topics.sh --create --topic migration-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
