@@ -12,6 +12,7 @@ import java.util.Map;
  * This makes the list of services dynamic and easy to configure.
  */@ConfigurationProperties(prefix = "external")
 public class ExternalServiceProperties {
+// Holds a Map<String, ServiceConfig> where each entry key becomes the health indicator key (e.g., camunda-workflow-engine) and ServiceConfig has fields such as url and flow.
     private Map<String, ServiceConfig> services = new HashMap<>();
 
     public Map<String, ServiceConfig> getServices() {

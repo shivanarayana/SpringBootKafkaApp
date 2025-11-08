@@ -18,6 +18,10 @@ import java.util.stream.Collectors;
  * This class acts as the Service Manager, dynamically creating and registering
  * a HealthIndicator for every external service defined in application.yaml.
  * It replaces the static CamundaHealthIndicator.java.
+ *
+ * Reads ExternalServiceProperties.getServices() map. *
+ * For each map entry (name, config), it creates a HealthIndicator lambda that invokes checkExternalService(name, config). *
+ * Registers the indicator under the name key into the HealthContributorRegistry or via Spring Boot Actuator registration API.
  */
 @Component
 public class DynamicHealthCheckRegistrar implements InitializingBean {
@@ -47,7 +51,7 @@ public class DynamicHealthCheckRegistrar implements InitializingBean {
         String url = config.getUrl();
         String flow = config.getFlow();
 
-        try {
+        try { // Performs an HTTP GET to config.getUrl() using RestTemplate
             ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
             Health.Builder builder = response.getStatusCode().is2xxSuccessful() ? Health.up() : Health.down();

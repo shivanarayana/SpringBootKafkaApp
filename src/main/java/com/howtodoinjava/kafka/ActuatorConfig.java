@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 import java.util.Properties;
-
+// Configuration class that declares beans used by health checks.
 @Configuration
 public class ActuatorConfig {
 
