@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 9001
 spring:
   kafka:
     bootstrap-servers: localhost:9092
@@ -21,7 +21,13 @@ management:
       exposure:
         include: health
 
-# SERVICE CHECKER CONFIGURATION (Camunda)
-servicechecker:
-  camunda:
-    url: http://localhost:8080/engine-rest
+# DYNAMIC SERVICE CHECKER CONFIGURATION
+external:
+  services:
+    camunda-workflow-engine:
+      url: http://localhost:8080/engine-rest/version
+      flow: BPMN_FLOW
+    google-homepage:
+      url: https://www.google.com
+    internal-rest-api:
+      url: http://localhost:8081/health
