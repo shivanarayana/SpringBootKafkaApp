@@ -21,7 +21,13 @@ management:
       exposure:
         include: health
 
-# SERVICE CHECKER CONFIGURATION (Camunda)
-servicechecker:
+# CONFIG MANAGER PROPERTIES
+test-harness:
+  # Kafka Topics used by the MessagingAdapter
+  input-topic: test
+  output-topic: validated-messages
+
+  # Camunda URLs used by the WorkflowClient (and Health Check)
   camunda:
-    url: http://localhost:8080/engine-rest
+    base-url: http://localhost:8080/engine-rest
+    process-definition-key: order-fulfillment-bpmn

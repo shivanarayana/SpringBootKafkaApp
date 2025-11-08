@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 public class CamundaHealthIndicator implements HealthIndicator {
 
     // Inject the Camunda URL from application.yaml
-    @Value("${servicechecker.camunda.url:http://localhost:8080/engine-rest}")
+    @Value("${test-harness.camunda.base-url:http://localhost:8080/engine-rest}")
     private String camundaUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
