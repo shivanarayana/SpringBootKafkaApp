@@ -28,55 +28,26 @@ public class DynamicHealthCheckRegistrar implements InitializingBean {
 
     private final HealthContributorRegistry registry;
     private final ExternalServiceProperties properties;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final HealthCheckExecutorService healthCheckExecutorService; // <--- NEW INJECTION
 
     @Autowired
     public DynamicHealthCheckRegistrar(
             HealthContributorRegistry registry,
-            ExternalServiceProperties properties) {
+            ExternalServiceProperties properties,
+            HealthCheckExecutorService healthCheckExecutorService) { // <--- Inject the new service
         this.registry = registry;
         this.properties = properties;
+        this.healthCheckExecutorService = healthCheckExecutorService; // <--- Store it
     }
 
     @Override
     public void afterPropertiesSet() {
         // Register a health indicator for each external service
         properties.getServices().forEach((name, config) -> {
-            HealthIndicator indicator = () -> checkExternalService(name, config);
+            HealthIndicator indicator = () -> healthCheckExecutorService.checkExternalService(name, config); // <--- Reuse the public method
             registry.registerContributor(name, indicator);
         });
     }
 
-    private Health checkExternalService(String name, ExternalServiceProperties.ServiceConfig config) {
-        String url = config.getUrl();
-        String flow = config.getFlow();
-
-        try { // Performs an HTTP GET to config.getUrl() using RestTemplate
-            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-
-            Health.Builder builder = response.getStatusCode().is2xxSuccessful() ? Health.up() : Health.down();
-            builder.withDetail("url", url);
-
-            if (flow != null) {
-                builder.withDetail("flow", flow);
-            }
-
-            builder.withDetail("message",
-                    response.getStatusCode().is2xxSuccessful()
-                            ? "Connection successful"
-                            : "Unexpected status: " + response.getStatusCode());
-
-            return builder.build();
-
-        } catch (Exception e) {
-            Health.Builder builder = Health.down(e)
-                    .withDetail("url", url)
-                    .withDetail("message", "Failed to connect to " + name);
-            if (flow != null) {
-                builder.withDetail("flow", flow);
-            }
-            return builder.build();
-        }
-    }
-
+    // *** REMOVE the private checkExternalService method from this class ***
 }

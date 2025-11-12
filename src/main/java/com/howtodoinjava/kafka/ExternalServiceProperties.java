@@ -23,7 +23,7 @@ public class ExternalServiceProperties {
         this.services = services;
     }
 
-    public static class ServiceConfig {
+    public static class ServiceConfig {//To logically group configuration objects that belong together — making the YAML structure neat, type-safe, and easily bindable by Spring Boot
         private String url;
         private String flow;
 
