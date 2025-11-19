@@ -1,9 +1,14 @@
 package com.howtodoinjava.kafka;
 
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.URI;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 
 @Service // Make it a Spring bean for injection
 public class HealthCheckExecutorService {
@@ -12,6 +17,20 @@ public class HealthCheckExecutorService {
 
     public HealthCheckExecutorService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+    }
+
+    public String checkUrlHealth(String url) {
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return "UP";
+            } else {
+                return "DOWN";
+            }
+        } catch (Exception e) {
+            return "DOWN";
+        }
     }
 
     /**
